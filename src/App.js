@@ -13,7 +13,7 @@ const cardImages = [
 
 function App() {
   const [cards, setCards] = useState([])
-  const [turns, setTurns] = useState(0)
+  const [setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
 
@@ -51,6 +51,7 @@ function App() {
         setTimeout(() => resetTurn(), 1000)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choiceOne, choiceTwo])
 
   console.log(cards)
