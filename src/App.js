@@ -28,6 +28,8 @@ function App() {
     setTurns(0)
   }
 
+  console.log(turns)
+
   // handle choice
 
   const handleChoice = (card) => {
@@ -67,6 +69,7 @@ function App() {
     <div className="App">
       <h1>Magic Match</h1>
       <button onClick={shuffleCards}>New Game</button>
+      <h2>Turns: {turns}</h2>
 
       <div className="card-grid">
         {cards.map((card) => (
