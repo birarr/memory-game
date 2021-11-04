@@ -1,8 +1,10 @@
 import './styles.css'
 
-export const Card = ({ card, handleChoice, flipped }) => {
+export const Card = ({ card, handleChoice, flipped, disabled }) => {
   const handleClick = () => {
-    handleChoice(card)
+    if (!disabled) {
+      handleChoice(card)
+    }
   }
   return (
     <div className="card">
