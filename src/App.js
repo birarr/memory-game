@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Confetti from 'react-confetti'
 import './App.css'
 import { Card } from './components/Card/Card'
 
@@ -18,6 +19,11 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
   const [disabled, setDisabled] = useState(false)
+  const [height, setHeight] = useState(null)
+  const [width, setWidth] = useState(null)
+  const [winner, setWinner] = useState(false)
+  const [matches, setMatches] = useState(0)
+  const confettiRef = useRef(null)
 
   //shuffle
   const shuffleCards = () => {
@@ -27,9 +33,9 @@ function App() {
 
     setCards(shuffledCards)
     setTurns(0)
+    setWinner(false)
+    setMatches(0)
   }
-
-  console.log(turns)
 
   // handle choice
 
@@ -45,6 +51,7 @@ function App() {
         setCards((prevCards) => {
           return prevCards.map((card) => {
             if (card.src === choiceOne.src) {
+              setMatches(matches + 1)
               return { ...card, matched: true }
             } else {
               return card
@@ -67,8 +74,19 @@ function App() {
     setDisabled(false)
   }
 
+  useEffect(() => {
+    setHeight(confettiRef.current.clientHeight)
+    setWidth(confettiRef.current.clientWidth)
+  }, [])
+
+  useEffect(() => {
+    if (matches === 6) {
+      setWinner(true)
+    }
+  }, [matches, winner])
+
   return (
-    <div className="App">
+    <div className="App" ref={confettiRef}>
       <h1>Magic Match</h1>
       <button onClick={shuffleCards}>New Game</button>
       <h2>Turns: {turns}</h2>
@@ -84,6 +102,24 @@ function App() {
           />
         ))}
       </div>
+      {winner && (
+        <Confetti
+          width={width + 1200}
+          height={height + 600}
+          recycle={winner}
+          drawShape={(ctx) => {
+            ctx.beginPath()
+            for (let i = 0; i < 22; i++) {
+              const angle = 0.35 * i
+              const x = (0.2 + 1.5 * angle) * Math.cos(angle)
+              const y = (0.2 + 1.5 * angle) * Math.sin(angle)
+              ctx.lineTo(x, y)
+            }
+            ctx.stroke()
+            ctx.closePath()
+          }}
+        />
+      )}
     </div>
   )
 }
